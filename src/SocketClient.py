@@ -12,6 +12,7 @@ class SocketClient(object):
     def connect(self, ip_address, port):
         port_description = (ip_address, port)
 
+        print("Attempting to bind to port with description:", port_description)
         # Bind to the port description
         self.sock.connect(port_description)
 
@@ -58,10 +59,10 @@ class SocketClient(object):
 if __name__ == "__main__":
     test_client = SocketClient()
 
-    ip_address = input("[RC8 ip: 192.168.0.1] ip_address: ")
-    port = input("[RC8 port: 49152] port: ")
+    ip_address = "192.168.1.100"
+    port = 49152
 
-    test_client.connect(ip_address=ip_address, port=int(port))
+    test_client.connect(ip_address=ip_address, port=port)
 
     while(True):
         test_client.menu()
