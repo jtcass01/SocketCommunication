@@ -18,8 +18,8 @@ class SocketClient(object):
         print("Successfully created connection with server @ address {} through port {}".format(ip_address, port))
 
 
-    def loop_listen(self):
-        for i in range(10):
+    def loop_listen(self, expected_message_count = 10):
+        for message in range(expected_message_count):
             print(self.sock.recv(self.buffer_size))
 
     def send_message(self, message):
@@ -27,19 +27,41 @@ class SocketClient(object):
 
     def prompt_for_message(self):
         message = input('What would you like to send to the server?')
-        self.send_message(message)
+        self.send_message(message = message)
+
+    def prompt_for_loop_listen(self):
+        expected_message_count = input('How many messages are you expecting?')
+        self.loop_listen(expected_message_count = expected_message_count)
 
     def end_connection(self):
         print("Ending the TCP Connection.")
         self.sock.close()
 
+    def menu(self):
+        print("==== MENU ====")
+        print("1) send a message")
+        print("2) loop listen")
+        print("0) end connection")
+
+        response = int(input("What would you like to do?"))
+
+        if(response == 1):
+            self.prompt_for_message()
+        elif(response == 2):
+            self.prompt_for_loop_listen()
+        elif(response == 0):
+            self.end_connection()
+        else:
+            print("Invalid menu selection.  Please try again...")
+
+
 if __name__ == "__main__":
     test_client = SocketClient()
 
-    test_client.connect(ip_address="localhost", port=8081)
+    ip_address = input("[RC8 ip: 192.168.0.1] ip_address: ")
+    port = input("[RC8 port: 49152] port: ")
 
+    test_client.connect(ip_address=ip_address, port=int(port))
 
     while(True):
-        test_client.prompt_for_message()
-
-    test_client.end_connection()
+        test_client.menu()
